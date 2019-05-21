@@ -1,15 +1,17 @@
 package com.mdi.backend.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Choice {
+
     @Id
     @GeneratedValue
+    @Column(nullable = false, updatable = false)
     private Long id;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String name;
 
     @ManyToOne

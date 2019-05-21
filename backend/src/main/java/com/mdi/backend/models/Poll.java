@@ -12,9 +12,19 @@ public class Poll {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false, updatable = false)
     private Long id;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String name;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String location;
+
+    @Basic(optional = false)
+    @Column(nullable = false)
     private String description;
 
     @OneToMany(mappedBy = "poll", cascade = CascadeType.PERSIST)
@@ -28,6 +38,13 @@ public class Poll {
         this.location = location;
         this.description = description;
         choices = new ArrayList<Choice>();
+    }
+
+    public Poll(String name, String location, String description, ArrayList<Choice> choices){
+        this.name = name;
+        this.location = location;
+        this.description = description;
+        this.choices = choices;
     }
 
     public void addChoice(Choice choice){

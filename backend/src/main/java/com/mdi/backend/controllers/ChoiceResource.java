@@ -7,10 +7,8 @@ import com.mdi.backend.repositories.PollRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
-import java.util.ArrayList;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,23 +50,24 @@ public class ChoiceResource {
             throw new ChoiceNotFoundException("id-"+idChoice);
         }
         choiceRepository.deleteById(idChoice);
+        choiceRepository.flush();
     }
 
     @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/polls/{id}/choices")
-    public List<Choice> createChoices(@RequestBody List<Choice> choices, @PathVariable long id) {
+    public List<Choice> createChoices(@Valid @RequestBody List<Choice> choices, @PathVariable long id) {
         Poll poll = isPollExisting(id);
         for (Choice choice:choices) {
             choice.setPoll(poll);
             poll.addChoice(choice);
-            choiceRepository.save(choice);
+            choiceRepository.saveAndFlush(choice);
         }
         return choices;
     }
 
     @CrossOrigin(origins = "http://localhost:8080")
     @PutMapping("/polls/{idPoll}/choices/{idChoice}")
-    public ResponseEntity<Object> updateChoice(@RequestBody Choice choice, @PathVariable long idPoll, @PathVariable long idChoice) {
+    public ResponseEntity<Object> updateChoice(@Valid @RequestBody Choice choice, @PathVariable long idPoll, @PathVariable long idChoice) {
 
         Optional<Poll> pollOptional = pollRepository.findById(idPoll);
         Optional<Choice> choiceOptional = choiceRepository.findById(idChoice);
@@ -77,10 +76,8 @@ public class ChoiceResource {
             return ResponseEntity.notFound().build();
         }
 
-        choice.setId(idChoice);
-
-        choiceRepository.save(choice);
-
+        choiceOptional.get().setName(choice.getName());
+        choiceRepository.flush();
         return ResponseEntity.noContent().build();
     }
 
