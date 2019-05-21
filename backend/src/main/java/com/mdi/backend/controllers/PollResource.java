@@ -41,8 +41,6 @@ public class PollResource {
             choiceRepository.deleteById(choice.getId());
         }
         pollRepository.deleteById(id);
-        choiceRepository.flush();
-        pollRepository.flush();
     }
 
     @CrossOrigin(origins = "http://localhost:8080")
@@ -50,9 +48,8 @@ public class PollResource {
     public Poll createPoll(@Valid @RequestBody Poll poll) {
         for (Choice choice:poll.getChoices()) {
             choice.setPoll(poll);
-            choiceRepository.save(choice);
+            choiceRepository.saveAndFlush(choice);
         }
-        choiceRepository.flush();
         Poll savedPoll = pollRepository.saveAndFlush(poll);
         return savedPoll;
     }
@@ -70,7 +67,6 @@ public class PollResource {
         actualPoll.setName(poll.getName());
         actualPoll.setLocation(poll.getLocation());
         actualPoll.setDescription(poll.getDescription());
-        pollRepository.flush();
 
         return ResponseEntity.noContent().build();
     }

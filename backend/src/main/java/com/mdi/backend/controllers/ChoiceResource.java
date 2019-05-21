@@ -50,7 +50,6 @@ public class ChoiceResource {
             throw new ChoiceNotFoundException("id-"+idChoice);
         }
         choiceRepository.deleteById(idChoice);
-        choiceRepository.flush();
     }
 
     @CrossOrigin(origins = "http://localhost:8080")
@@ -77,7 +76,6 @@ public class ChoiceResource {
         }
 
         choiceOptional.get().setName(choice.getName());
-        choiceRepository.flush();
         return ResponseEntity.noContent().build();
     }
 
