@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <router-link to="/">Revenir à la page d'accueil</router-link>
+    <router-link to="/" class="link">Revenir à la page d'accueil</router-link>
     <div class="form-container">
       <div class="form-header">
         <h1 class="title">Créer un doodle!</h1>
@@ -57,6 +57,7 @@
 
 <script>
 import axios from 'axios';
+import router from '../router';
 
 export default {
   name: 'CreatePoll',
@@ -92,27 +93,25 @@ export default {
       this.step = 1
     },
     onSubmit: function() {
+      if(this.choices.length === 0) {
+        return
+      }
+
       const data = {
         "name": this.name,
         "location": this.location,
         "description": this.description,
+        "choices": this.choices.map((e) => {
+          return {"name": e}
+        })
       }
-      console.log(data)
-
-      const data_choices = this.choices.map((e) => {
-        return {"name": e}
-      })
-      console.log(data_choices)
       axios.post('http://localhost:7777/polls', data)
         .then(res => {
-          const { id } = res.data.id
-          axios.post(`http://localhost:7777/polls/${id}/choices`, data_choices)
-            .then(res => {
-              console.log(res)
-            })
-            .catch((err) => {
-              console.log(err)
-            })
+          const { id } = res.data
+          router.push({name: 'show', params: {id}})
+        })
+        .catch(() => {
+          alert("Erreur lors de la création du poll.")
         })
     },
     select: function(id) {
@@ -174,7 +173,11 @@ export default {
   border-radius: 5px;
   color: white;
   font-weight: 600;
-  font-size: 1.2rem;
+}
+
+.link {
+  text-decoration: none;
+  color: #5D55FA;
 }
 
 .add-button:hover {
