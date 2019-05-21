@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Polls from './views/Polls.vue'
+import Poll from './views/Poll.vue'
 
 Vue.use(Router)
 
@@ -9,7 +10,7 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Polls
     },
     {
       path: '/create',
@@ -18,6 +19,11 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/CreatePoll.vue')
+    },
+    {
+      path: '/polls/:id',
+      name: 'show',
+      component: Poll,
     }
   ]
 })
