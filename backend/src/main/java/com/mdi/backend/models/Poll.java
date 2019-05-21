@@ -67,7 +67,7 @@ public class Poll {
         return location;
     }
 
-    public void setLocation(String localion) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
@@ -84,7 +84,7 @@ public class Poll {
         return "Poll{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", localion='" + location + '\'' +
+                ", location='" + location + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }
