@@ -7,15 +7,9 @@ public class Choice {
 
     @Id
     @GeneratedValue
-    @Column(nullable = false, updatable = false)
     private Long id;
 
-    @Basic(optional = false)
-    @Column(nullable = false)
     private String name;
-
-    @ManyToOne
-    private Poll poll;
 
     public Choice (){
     }
@@ -38,14 +32,6 @@ public class Choice {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Poll getPoll() {
-        return poll;
-    }
-
-    public void setPoll(Poll poll) {
-        this.poll =  poll;
     }
 
     @Override

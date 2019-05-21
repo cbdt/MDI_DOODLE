@@ -46,11 +46,7 @@ public class PollResource {
     @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/polls")
     public Poll createPoll(@Valid @RequestBody Poll poll) {
-        for (Choice choice:poll.getChoices()) {
-            choice.setPoll(poll);
-            choiceRepository.saveAndFlush(choice);
-        }
-        Poll savedPoll = pollRepository.saveAndFlush(poll);
+        Poll savedPoll = pollRepository.save(poll);
         return savedPoll;
     }
 

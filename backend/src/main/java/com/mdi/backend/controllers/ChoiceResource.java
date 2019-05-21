@@ -57,9 +57,8 @@ public class ChoiceResource {
     public List<Choice> createChoices(@Valid @RequestBody List<Choice> choices, @PathVariable long id) {
         Poll poll = isPollExisting(id);
         for (Choice choice:choices) {
-            choice.setPoll(poll);
             poll.addChoice(choice);
-            choiceRepository.saveAndFlush(choice);
+            choiceRepository.save(choice);
         }
         return choices;
     }

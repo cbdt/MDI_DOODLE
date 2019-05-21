@@ -12,22 +12,15 @@ public class Poll {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false, updatable = false)
     private Long id;
 
-    @Basic(optional = false)
-    @Column(nullable = false)
     private String name;
 
-    @Basic(optional = false)
-    @Column(nullable = false)
     private String location;
 
-    @Basic(optional = false)
-    @Column(nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "poll", cascade = CascadeType.PERSIST)
+    @OneToMany(cascade=CascadeType.ALL)
     List<Choice> choices;
 
     public Poll() {
