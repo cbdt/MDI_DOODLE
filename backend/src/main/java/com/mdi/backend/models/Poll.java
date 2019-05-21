@@ -14,7 +14,7 @@ public class Poll {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private String localion;
+    private String location;
     private String description;
 
     @OneToMany(mappedBy = "poll", cascade = CascadeType.PERSIST)
@@ -23,9 +23,9 @@ public class Poll {
     public Poll() {
     }
 
-    public Poll(String name, String localion, String description) {
+    public Poll(String name, String location, String description) {
         this.name = name;
-        this.localion = localion;
+        this.location = location;
         this.description = description;
         choices = new ArrayList<Choice>();
     }
@@ -53,12 +53,12 @@ public class Poll {
         this.name = name;
     }
 
-    public String getLocalion() {
-        return localion;
+    public String getLocation() {
+        return location;
     }
 
-    public void setLocalion(String localion) {
-        this.localion = localion;
+    public void setLocation(String localion) {
+        this.location = location;
     }
 
     public String getDescription() {
@@ -74,7 +74,7 @@ public class Poll {
         return "Poll{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", localion='" + localion + '\'' +
+                ", localion='" + location + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }
