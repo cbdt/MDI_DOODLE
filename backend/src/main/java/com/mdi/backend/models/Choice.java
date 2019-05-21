@@ -18,7 +18,7 @@ public class Choice {
     public Choice (){
     }
 
-    public Choice(String name, Poll poll) {
+    public Choice(String name) {
         this.name = name;
     }
 
