@@ -51,7 +51,7 @@ public class ChoiceResource {
         choiceRepository.deleteById(idChoice);
     }
 
-    @PostMapping("/polls/{id}/Choices")
+    @PostMapping("/polls/{id}/choices")
     public List<Choice> createChoices(@RequestBody List<Choice> choices, @PathVariable long id) {
         Poll poll = isPollExisting(id);
         for (Choice choice:choices) {
