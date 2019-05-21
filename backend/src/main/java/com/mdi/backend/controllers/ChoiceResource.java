@@ -22,11 +22,13 @@ public class ChoiceResource {
     @Autowired
     private PollRepository pollRepository;
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/polls/{idPoll}/choices")
     public List<Choice> retrieveAllChoicesFromPoll(@PathVariable long idPoll) {
         return isPollExisting(idPoll).getChoices();
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/polls/{idPoll}/choices/{idChoice}")
     public Choice retrieveChoiceFromPoll(@PathVariable long idPoll, @PathVariable long idChoice) {
         Poll poll = isPollExisting(idPoll);
@@ -39,6 +41,7 @@ public class ChoiceResource {
         return choice;
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @DeleteMapping("/polls/{idPoll}/choices/{idChoice}")
     public void deleteChoiceFromPoll(@PathVariable long idPoll, @PathVariable long idChoice) {
         Poll poll = isPollExisting(idPoll);
@@ -51,6 +54,7 @@ public class ChoiceResource {
         choiceRepository.deleteById(idChoice);
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/polls/{id}/choices")
     public List<Choice> createChoices(@RequestBody List<Choice> choices, @PathVariable long id) {
         Poll poll = isPollExisting(id);
@@ -62,6 +66,7 @@ public class ChoiceResource {
         return choices;
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @PutMapping("/polls/{idPoll}/choices/{idChoice}")
     public ResponseEntity<Object> updateChoice(@RequestBody Choice choice, @PathVariable long idPoll, @PathVariable long idChoice) {
 

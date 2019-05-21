@@ -17,11 +17,13 @@ public class PollResource {
     @Autowired
     private PollRepository pollRepository;
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/polls")
     public List<Poll> retrieveAllPolls() {
         return pollRepository.findAll();
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/polls/{id}")
     public Poll retrievePoll(@PathVariable long id) {
         Optional<Poll> poll = pollRepository.findById(id);
@@ -32,17 +34,20 @@ public class PollResource {
         return poll.get();
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @DeleteMapping("/polls/{id}")
     public void deletePoll(@PathVariable long id) {
         pollRepository.deleteById(id);
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/polls")
     public Poll createPoll(@RequestBody Poll poll) {
         Poll savedPoll = pollRepository.save(poll);
         return savedPoll;
     }
 
+    @CrossOrigin(origins = "http://localhost:8080")
     @PutMapping("/students/{id}")
     public ResponseEntity<Object> updatePoll(@RequestBody Poll poll, @PathVariable long id) {
 
