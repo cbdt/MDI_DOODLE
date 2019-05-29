@@ -1,11 +1,10 @@
 package com.mdi.backend.controllers;
 
-import com.mdi.backend.models.Choice;
 import com.mdi.backend.models.Poll;
-import com.mdi.backend.repositories.ChoiceRepository;
 import com.mdi.backend.repositories.PollRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,57 +13,53 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")
 public class PollResource {
 
     @Autowired
     private PollRepository pollRepository;
-    @Autowired
-    private ChoiceRepository choiceRepository;
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/polls")
-    public List<Poll> retrieveAllPolls() {
-        return pollRepository.findAll(Sort.by(Sort.Direction.ASC,"name"));
+    public ResponseEntity<List<Poll>> retrieveAllPolls() {
+        return new ResponseEntity<>(pollRepository.findAll(Sort.by(Sort.Direction.ASC,"name")), HttpStatus.OK );
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/polls/{id}")
-    public Poll retrievePoll(@PathVariable long id) {
-        return isPollExisting(id);
+    public ResponseEntity<Poll> retrievePoll(@PathVariable long id) {
+        return new ResponseEntity<>(isPollExisting(id), HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @DeleteMapping("/polls/{id}")
-    public void deletePoll(@PathVariable long id) {
+    public ResponseEntity<?> deletePoll(@PathVariable long id) {
         Poll poll = isPollExisting(id);
-        for (Choice choice: poll.getChoices()) {
-            choiceRepository.deleteById(choice.getId());
-        }
+        // Les choices sont delete part le cascade type all;
         pollRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/polls")
-    public Poll createPoll(@Valid @RequestBody Poll poll) {
+    public ResponseEntity<Poll> createPoll(@Valid @RequestBody Poll poll) {
         Poll savedPoll = pollRepository.save(poll);
-        return savedPoll;
+        return new ResponseEntity<>(savedPoll, HttpStatus.CREATED);
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
     @PutMapping("/students/{id}")
-    public ResponseEntity<Object> updatePoll(@Valid @RequestBody Poll poll, @PathVariable long id) {
+    public ResponseEntity<Poll> updatePoll(@Valid @RequestBody Poll newPoll, @PathVariable long id) {
+        Poll poll = isPollExisting(id);
 
-        Optional<Poll> optionalPoll = pollRepository.findById(id);
+        // On met à jour l'ancien poll
+        if (newPoll.getName()!=null){
+            poll.setName(newPoll.getName());
+        }
+        if (newPoll.getLocation()!=null){
+            poll.setLocation(newPoll.getLocation());
+        }
+        if (newPoll.getDescription()!=null){
+            poll.setDescription(newPoll.getDescription());
+        }
 
-        if (!optionalPoll.isPresent())
-            return ResponseEntity.notFound().build();
-
-        Poll actualPoll = optionalPoll.get();
-        actualPoll.setName(poll.getName());
-        actualPoll.setLocation(poll.getLocation());
-        actualPoll.setDescription(poll.getDescription());
-
-        return ResponseEntity.noContent().build();
+        Poll updatedPoll = pollRepository.save(poll);
+        return new ResponseEntity<>(updatedPoll, HttpStatus.OK);
     }
 
     private Poll isPollExisting(long id){

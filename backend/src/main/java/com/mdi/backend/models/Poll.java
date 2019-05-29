@@ -1,10 +1,11 @@
 package com.mdi.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -13,24 +14,28 @@ public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String name;
-
     private String location;
-
     private String description;
 
+    @CreationTimestamp
+    private Date createdAt;
+
+    @UpdateTimestamp
+    private Date updatedAt;
+
     @OneToMany(cascade=CascadeType.ALL)
+    @OrderBy("name")
     List<Choice> choices;
 
     public Poll() {
     }
 
-    public Poll(String name, String location, String description) {
+    public Poll(String name, String location, String description, List<Choice> choices) {
         this.name = name;
         this.location = location;
         this.description = description;
-        choices = new ArrayList<Choice>();
+        this.choices=choices;
     }
 
     public Poll(String name, String location, String description, ArrayList<Choice> choices){
@@ -43,10 +48,14 @@ public class Poll {
     public void addChoice(Choice choice){
         this.choices.add(choice);
     }
+    public void removeChoice(Choice choice){
+        this.choices.remove(choice);
+    }
 
     public void setId(Long id){
         this.id=id;
     }
+
     public Long getId() {
         return id;
     }
