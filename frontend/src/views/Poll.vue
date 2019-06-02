@@ -11,12 +11,18 @@
           <h2>{{ this.poll.name }}</h2>
         </div>
         <div class="body">
-          <h4 class="body-title">Liste des choix</h4>
-          <ul>
-            <li v-for="choice in this.poll.choices" :key="choice.id">
-              {{ choice.name }}
-            </li>
-          </ul>
+          <div v-if="!hasVoted">
+            <h4 class="body-title">Liste des choix</h4>
+            <ul>
+              <li class="body-choice" v-for="choice in this.poll.choices" :key="choice.id"
+              @click="vote(choice.id)">
+                {{ choice.name }} - {{ choice.users.length }} votes
+              </li>
+            </ul>
+          </div>
+          <div v-else>
+            <h3>Merci pour votre vote !</h3>
+          </div>
         </div>
       </div>
     </div>
@@ -33,6 +39,7 @@ export default {
     return {
       poll: undefined,
       loading: true,
+      hasVoted: false,
     }
   },
   mounted: function() {
@@ -45,6 +52,37 @@ export default {
       })
     
   },
+  methods: {
+    vote: function(id) {
+      let name = prompt("Veuillez préciser un pseudo")
+      let user = {username: name}
+      axios.post(`http://localhost:7777/users`, user)
+        .then(res => {
+          let { id: userId } = res.data
+          let choices = [id]
+          axios.post(`http://localhost:7777/polls/${this.poll.id}/vote/${userId}`, {
+            choices
+          })
+          .then(() => {
+                /*
+                //TODO: Ne pas refaire un requête, ça implique de refactoriser la manière dont on sauvegarde les choices et de sauvegarder la liste des choices en dehors du dict poll
+                axios.get(`http://localhost:7777/polls/${this.poll.id}`)
+                .then((res) => {
+                  this.poll = res.data
+                })
+                */
+                this.hasVoted = true
+          })
+          .catch(err => {
+            console.error(err)
+          })
+        })
+        .catch(err => {
+          console.error(err)
+        })
+
+    }
+  }
 }
 </script>
 
@@ -126,5 +164,24 @@ export default {
   display: flex;
   justify-content: center;
   padding: 2rem;
+}
+
+.body-choice {
+  background-color: white;
+  padding: 1rem;
+  cursor: pointer;
+  color: #242424;
+  margin-bottom: 1rem;
+}
+
+.body-choice:last-child {
+  margin-bottom: 0;
+}
+
+li {
+  list-style-type: none;
+}
+ul {
+  padding: 0;
 }
 </style>

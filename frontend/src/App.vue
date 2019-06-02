@@ -28,7 +28,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #FFE0F0;
   width: 100vw;
-  height: 100vh;;
+  height: 100%;
+  min-height: 100vh;
   color: white;
   display: flex;
   justify-content: center;

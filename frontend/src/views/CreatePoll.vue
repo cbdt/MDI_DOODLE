@@ -3,7 +3,7 @@
     <router-link to="/" class="link">Revenir à la page d'accueil</router-link>
     <div class="form-container">
       <div class="form-header">
-        <h1 class="title">Créer un doodle!</h1>
+        <h1 class="title">Créer un sondage!</h1>
       </div>
       <div v-if="step === 1">
         <form v-on:submit.prevent="goToNext" class="create-form">
@@ -102,7 +102,7 @@ export default {
         "location": this.location,
         "description": this.description,
         "choices": this.choices.map((e) => {
-          return {"name": e}
+          return {"name": e, "users": []}
         })
       }
       axios.post('http://localhost:7777/polls', data)
@@ -111,7 +111,7 @@ export default {
           router.push({name: 'show', params: {id}})
         })
         .catch(() => {
-          alert("Erreur lors de la création du poll.")
+          alert("Erreur lors de la création du sondage.")
         })
     },
     select: function(id) {

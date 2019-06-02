@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="header">
-      <h2>Liste des doodles</h2>
-      <router-link to="/create" class="link">Créer un doodle!</router-link>
+      <h2>Liste des sondages</h2>
+      <router-link to="/create" class="link">Créer un sondage!</router-link>
     </div>
     <ul class="polls" >
       <li class="poll" v-for="poll in polls" v-bind:key="poll.id" @click="goTo(poll.id)">
@@ -12,7 +12,7 @@
         </div>
         <ul class="choices">
           <li v-for="choice in poll.choices" v-bind:key="choice.id" class="choice">
-            {{ choice.name }}
+            {{ choice.name }} - {{ choice.users.length }} votes
           </li>
         </ul>
       </li>
@@ -49,6 +49,7 @@ export default {
 <style scoped>
 .polls {
   padding: 0;
+  margin-top: 0;
 }
 
 .feather {
@@ -83,6 +84,7 @@ export default {
   background-color: #98AEEB;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   border-radius: 0.25rem;
+  margin: 2rem;
 }
 
 .header {
