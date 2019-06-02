@@ -36,4 +36,4 @@ A user can :
 2. Create a poll
 3. Add some choices
 4. Share his poll with his friend by sending them the link
-5. Vote and unvote for a choice
+5. Vote for a choice
